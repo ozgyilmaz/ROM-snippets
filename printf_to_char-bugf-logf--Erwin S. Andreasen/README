@@ -1,0 +1,17 @@
+This file contains a bunch of short snippets that were too short to be a
+snippet of their own.
+
+loop.c     - Kill the MUD if it goes into an endless loop [1]
+lastcomm.c - Save the last command before a crash
+
+stdarg.c   - printf_to_char, bugf, logf - variable arguments
+
+
+NOTES:
+
+lastcomm.c: Since I posted the code to merc-l, I changed
+nasty_signal_handler() to return rather than abort(): this produces a better
+stack.
+
+[1] This file used to be named deadlock.c, but it has nothing to do with a
+deadlock.
