@@ -1,0 +1,49 @@
+Changes since v6
+----------------
+
+Fixed a security problem: make sure that in do_copyover you disconnect
+*all* characters that are not currently in the game.
+
+Changes since v5
+----------------
+
+Added instructions for Smaug 1.4, submitted by callidyrr-is@home.com
+(http://tgki.cjb.net/)
+
+Chance since v4
+---------------
+
+The COPYOVER_FILE was never closed in copyover_recover. Thanks to Jessica
+Boyd <enigma@ns1.inland.net> for finding this problem.
+
+Now a Circle patch is available. Thanks for Dan Stagner and Chris Bagget to
+testing it and finding the bug :)
+
+
+Changes since v3
+----------------
+
+Added Walter Goodwin's patch for Smaug. Moved the files to an archive.
+
+Changes since v2
+----------------
+
+To check if someone is playing, the do_copyover checked if their connected
+states is 0 or less. In my setup, I have states that are logging in as
+negative, playing as 0, and note-writing and such states (which should not
+be freed when losink link) as positive.
+
+Changes since v1
+----------------
+
+ROM 2.4(b2 I think?) diff is now included, at the end of this file. I took a
+slightly modified ROM 2.4 source I had (I did not alas save the original) -
+with objdump/mobprogs, and added copyover, tested then created a diff.
+Export the last part of this file where the patch is, the apply with the
+'patch' program. It may fail, then you have to apply the patch by hand.
+
+I assume you know what the patch program is or if not, are smart enough to
+figure out how to find it. I also assume at least intermediate C knowledge:
+if you are confused by a "parse error" then you shouldn't be installing this
+patch, you should be reading a book about 'C'.
+

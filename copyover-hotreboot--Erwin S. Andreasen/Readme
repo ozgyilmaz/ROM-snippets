@@ -1,0 +1,65 @@
+Copyover - "hot reboot"
+=======================
+
+by Erwin S. Andreasen <erwin@andreasen.org> - http://pip.dknet.dk/~erwin/
+
+
+Here is a version of the "hot reboot" command that logs in the players after 
+the reboot is finished. It was inspired by the discussion about how MUD++ did
+this, but it does not base itself on MUD++'s code.
+
+Basically, for each playing descriptor, it saves the descriptor number,
+the player's original name as well as the host name (so we don't have to find
+that again).
+
+Then, it closes fpReserve, and exec's the MUD again. As exec preserves
+open file descriptors, players do not lose link. The MUD is executed with
+some extra parameters, so the new copy knows that it should reload some
+player files. It does that, and puts in the players at their old places.
+
+This has been somewhat tested with Envy 2.0. For ROM users, there may be
+changes. Pets, for one - I just move the characters to the room, but as far as
+I remember, ROM also saves pets. There should be no problems with MERC.
+
+For Circle, only 3.0pl11 (10?) was tested.
+
+You will need to add do_copyover to some fitting file, and change a bit in
+db.c as well as comm.c.
+
+You will also need to add/change the prototypes for the various functions.
+If you do not know how to do this, you should do this at all :)
+
+
+KNOWN PROBLEMS:
+
+This is just like a normal reboot, except that players are logged in afterwards
+automatically. So, corpses and disarmed weapons disappear. Aggressive monsters
+reappear - so you might want to give your players some warning.
+
+If your MUD does not crash, and you never reboot but just use copyover, you
+will have one big log file. A solution is to let the MUD, not the startup
+script figure out a log file name. To allow output from perror() which goes
+to stderr to get there too, you could dup2 the new file to stderr and
+keep writing to stderr. I plan on making one log file for each day, and write
+only the time of the day in the log file, saving some space.
+
+Output buffer flushing - My log_string() does a fflush(stderr) each time it
+is used. I am not sure it is necessary, but you might add one too, just
+before the execl() if you are losing some of the log file before the
+copyover.
+
+Also remember that any send_to_char() that you use just before the
+do_copyover() will not get through, as they are buffered and not sent
+until all commands are completed. 
+
+
+CREDITS:
+
+This was inspired by the merc-l discussion of how Fusion's MUD++ did just the 
+same thing, although I did not use any of MUD++'s code. If you use this 
+command, mail me, as well as add my name in your help entry. You are also
+required just to take at least a brief look at ftp://ftp.pip.dknet.dk ,
+in the /pub/pip1773 directory for my other improvements to MERC/Envy/ROM
+code :)
+
+
